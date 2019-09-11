@@ -4,9 +4,9 @@
 ### Prerequisites
 
 MySQl, Java, Spring boot + dependencies: 
- + Spring Web, 
- + JDBC API, 
- + MySQL Driver.
+ + Spring Web
+ + JDBC API
+ + MySQL Driver
 
 ## Running the tests
 

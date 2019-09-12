@@ -33,6 +33,9 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
     private static final String DELETE_INVOICEITEM_SQL =
             "delete from invoice_item where invoice_item_id =  ?";
 
+    public static final String GET_IITEMS_BY_INVOICE_SQL =
+            "select * from invoice_item where invoice_item.invoice_id = ?";
+
     // ===========================
 
     private JdbcTemplate jdbcTemplate;
@@ -92,6 +95,11 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
     @Transactional
     public void deleteInvoiceItem(int id) {
         jdbcTemplate.update(DELETE_INVOICEITEM_SQL, id);
+    }
+
+    @Override
+    public List<InvoiceItem> getAllByInvoiceId(int id) {
+        return jdbcTemplate.query(GET_IITEMS_BY_INVOICE_SQL, this::mapRowToInvoiceItem, id);
     }
 
     // ===========================

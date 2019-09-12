@@ -29,9 +29,9 @@ public interface InvoiceDao {
 
     /**
      * Update an Invoice in the database
-     * @param invoiceId
+     * @param invoice
      */
-    void updateInvoice(Integer invoiceId);
+    void updateInvoice(Invoice invoice);
 
     /**
      * Delete an invoice in the database

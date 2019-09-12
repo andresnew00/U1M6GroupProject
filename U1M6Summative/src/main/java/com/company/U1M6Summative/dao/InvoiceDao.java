@@ -1,11 +1,12 @@
 package com.company.U1M6Summative.dao;
 
 import com.company.U1M6Summative.dto.Invoice;
+import com.company.U1M6Summative.dto.InvoiceItem;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 public interface InvoiceDao {
-    //TODO Create and delete Invoices, including the associated Invoice Items
     /**
      * Adds a new Invoice
      * @param invoice

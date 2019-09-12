@@ -91,7 +91,7 @@ public class InvoiceDaoJdbcTemplateImp implements InvoiceDao {
         invoice.setOrderDate(rs.getDate("order_date").toLocalDate());
         invoice.setPickupDate(rs.getDate("pickup_date").toLocalDate());
         invoice.setReturnDate(rs.getDate("return_date").toLocalDate());
-        invoice.setLate_fee(rs.getBigDecimal("late_fee"));
+        invoice.setLateFee(rs.getBigDecimal("late_fee"));
 
         return invoice;
     }

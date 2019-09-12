@@ -2,7 +2,10 @@ package com.company.U1M6Summative.dao;
 
 import com.company.U1M6Summative.dto.Item;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class ItemDaoJdbcTemplateImpl implements ItemDao {
 
     private final JdbcTemplate sql;
@@ -29,13 +33,19 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao {
     private String SELECT_ITEM_SQL =
             "SELECT * FROM item WHERE item_id = ?";
     private String UPDATE_ITEM_SQL =
-            "UPDATE item SET name = ?, description = ?, daily_rate = ? WHERE id = ?";
+            "UPDATE item SET name = ?, description = ?, daily_rate = ? WHERE item_id = ?";
     private String DELETE_ITEM_SQL =
             "DELETE FROM item WHERE item_id = ?";
+    private String DELETE_INVOICE_ITEM_BY_ITEM_SQL =
+            "DELETE FROM invoice_item WHERE invoice_item.item_id = ?";
     private String GET_ALL_ITEM_SQL =
             "SELECT * FROM item";
+    private String GET_ALL_ITEM_BY_INVOICE_ITEM_SQL =
+            "SELECT * FROM item " +
+                    "INNER JOIN invoice_item on invoice_item.item_id = item.item_id";
 
     @Override
+    @Transactional
     public Item saveItem(Item item) {
 
         sql.update(INSERT_ITEM_SQL, item.getName(), item.getDescription(), item.getDailyRate());
@@ -46,27 +56,34 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao {
 
     @Override
     public Item findOne(int id) {
-        return sql.queryForObject(SELECT_ITEM_SQL, this::mapItemToRow, id);
+        try {
+            return sql.queryForObject(SELECT_ITEM_SQL, this::mapItemToRow, id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
+    @Transactional
     public void updateItem(Item item) {
-
+        sql.update(UPDATE_ITEM_SQL, item.getName(), item.getDescription(), item.getDailyRate(), item.getItemId());
     }
 
     @Override
+    @Transactional
     public void deleteItem(int id) {
-
+        sql.update(DELETE_INVOICE_ITEM_BY_ITEM_SQL, id);
+        sql.update(DELETE_ITEM_SQL, id);
     }
 
     @Override
     public List<Item> findAll() {
-        return null;
+        return sql.query(GET_ALL_ITEM_SQL, this::mapItemToRow);
     }
 
     @Override
     public List<Item> findAllByInvoiceItem(int id) {
-        return null;
+        return sql.query(GET_ALL_ITEM_BY_INVOICE_ITEM_SQL, this::mapItemToRow, id);
     }
 
     private Item mapItemToRow(ResultSet set, int rowNumber) throws SQLException {

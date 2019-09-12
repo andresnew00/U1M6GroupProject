@@ -82,7 +82,7 @@ public class CustomerDaoImplTest {
 
     @Test
     public void updateCustomer() {
-        customerDao.s
+//        customerDao.s
     }
 
     @Test

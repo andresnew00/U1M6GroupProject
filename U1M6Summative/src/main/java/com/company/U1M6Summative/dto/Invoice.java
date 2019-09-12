@@ -11,7 +11,7 @@ public class Invoice {
     private LocalDate orderDate;
     private LocalDate pickupDate;
     private LocalDate returnDate;
-    private BigDecimal late_fee;
+    private BigDecimal lateFee;
 
     public Integer getInvoiceId() {
         return invoiceId;
@@ -53,12 +53,12 @@ public class Invoice {
         this.returnDate = returnDate;
     }
 
-    public BigDecimal getLate_fee() {
-        return late_fee;
+    public BigDecimal getLateFee() {
+        return lateFee;
     }
 
-    public void setLate_fee(BigDecimal late_fee) {
-        this.late_fee = late_fee;
+    public void setLateFee(BigDecimal lateFee) {
+        this.lateFee = lateFee;
     }
 
     @Override
@@ -71,11 +71,11 @@ public class Invoice {
                 orderDate.equals(invoice.orderDate) &&
                 pickupDate.equals(invoice.pickupDate) &&
                 returnDate.equals(invoice.returnDate) &&
-                late_fee.equals(invoice.late_fee);
+                lateFee.equals(invoice.lateFee);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(invoiceId, customerId, orderDate, pickupDate, returnDate, late_fee);
+        return Objects.hash(invoiceId, customerId, orderDate, pickupDate, returnDate, lateFee);
     }
 }

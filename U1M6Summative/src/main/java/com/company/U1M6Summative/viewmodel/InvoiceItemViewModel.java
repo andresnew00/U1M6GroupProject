@@ -12,7 +12,7 @@ public class InvoiceItemViewModel {
 
     private int id;
     private Invoice invoice;
-    private Item item;
+    private List<Item> item;
     private int quantity;
     private BigDecimal unitRate;
     private BigDecimal discount;
@@ -21,7 +21,7 @@ public class InvoiceItemViewModel {
     public InvoiceItemViewModel() {
     }
 
-    public InvoiceItemViewModel(int id, Invoice invoice, Item item, int quantity, BigDecimal unitRate, BigDecimal discount, Customer customer) {
+    public InvoiceItemViewModel(int id, Invoice invoice, List<Item> item, int quantity, BigDecimal unitRate, BigDecimal discount, Customer customer) {
         this.id = id;
         this.invoice = invoice;
         this.item = item;
@@ -47,11 +47,11 @@ public class InvoiceItemViewModel {
         this.invoice = invoice;
     }
 
-    public Item getItem() {
+    public List<Item> getItem() {
         return item;
     }
 
-    public void setItem(Item item) {
+    public void setItem(List<Item> item) {
         this.item = item;
     }
 

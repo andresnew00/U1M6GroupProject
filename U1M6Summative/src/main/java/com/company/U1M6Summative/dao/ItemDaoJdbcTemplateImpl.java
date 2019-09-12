@@ -103,7 +103,11 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao {
 
         for (int i = 0; i < setters.size(); i++) {
             try {
-                setters.get(i).invoke(item, set.getObject(columnNames.get(i)));
+                if (setters.get(i).getParameterTypes()[0].getSimpleName().equalsIgnoreCase("localdate")) {
+                    setters.get(i).invoke(item, set.getDate(columnNames.get(i)).toLocalDate());
+                } else {
+                    setters.get(i).invoke(item, set.getObject(columnNames.get(i)));
+                }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 System.err.println("Error in reflective method call");
             }

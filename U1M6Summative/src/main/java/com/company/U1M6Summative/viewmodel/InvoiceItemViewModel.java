@@ -5,6 +5,7 @@ import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.dto.Item;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 public class InvoiceItemViewModel {

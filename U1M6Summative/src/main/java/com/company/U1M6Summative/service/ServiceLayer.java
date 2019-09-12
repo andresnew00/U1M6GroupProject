@@ -4,11 +4,15 @@ import com.company.U1M6Summative.dao.CustomerDao;
 import com.company.U1M6Summative.dao.InvoiceDao;
 import com.company.U1M6Summative.dao.InvoiceItemDao;
 import com.company.U1M6Summative.dao.ItemDao;
+import com.company.U1M6Summative.dto.Customer;
+import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.dto.InvoiceItem;
 import com.company.U1M6Summative.dto.Item;
+import com.company.U1M6Summative.viewmodel.InvoiceItemViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -73,5 +77,25 @@ public class ServiceLayer {
     public List<InvoiceItem> getAllInvoiceItems() {
         return invoiceItemDao.getAllInvoiceItems();
     }
+
+    private InvoiceItemViewModel buildViewModel(Invoice invoice) {
+
+        InvoiceItemViewModel viewModel = new InvoiceItemViewModel();
+
+        List<Item> items = itemDao.findAllByInvoiceItem(invoice.getInvoiceId());
+        Customer customer = customerDao.findCustomer(invoice.getCustomerId());
+        List<InvoiceItem> invoiceItem = invoiceItemDao.getAllByInvoiceId(invoice.getInvoiceId());
+
+        viewModel.setCustomer(customer);
+        viewModel.setItem(items);
+
+        viewModel.setUnitRate( items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
+
+        viewModel.setDiscount(new BigDecimal(0.00));
+
+        return viewModel;
+
+    }
+
 
 }

@@ -1,7 +1,6 @@
 package com.company.U1M6Summative.dao;
 
 import com.company.U1M6Summative.dto.Customer;
-import com.company.U1M6Summative.dto.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

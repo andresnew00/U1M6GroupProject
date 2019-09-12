@@ -1,9 +1,6 @@
 package com.company.U1M6Summative.service;
 
-import com.company.U1M6Summative.dao.CustomerDao;
-import com.company.U1M6Summative.dao.InvoiceDao;
-import com.company.U1M6Summative.dao.InvoiceItemDao;
-import com.company.U1M6Summative.dao.ItemDao;
+import com.company.U1M6Summative.dao.*;
 import com.company.U1M6Summative.dto.Customer;
 import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.dto.InvoiceItem;
@@ -33,39 +30,38 @@ public class ServiceLayerTest {
         CustomerDao customerDao;
         ItemDao itemDao;
         InvoiceDao invoiceDao;
-        InvoiceItemDao invoiceItemDao
+        InvoiceItemDao invoiceItemDao;
 
         // Helper methods
         private void setUpCustomerDaoMock() {
 
 
-            customerDao  = mock (customerDaoJdbcTemplateImpl.class);
+            customerDao  = mock (CustomerDaoImpl.class);
             Customer customer = new Customer();
 
-            customer.setCustomerId(i);
-            customer.setFirstName();
-            customer.setLastName();
-            customer.setEmail();
-            customer.setCompany();
-            customer.phone();
+            customer.setCustomerId(1);
+            customer.setFirstName("Jay");
+            customer.setLastName("Jay");
+            customer.setEmail("@jay");
+            customer.setCompany("JayComp");
+            customer.setPhone("111-222-3333");
 
             Customer  customer2 = new Customer();
-            customer2.setCustomerId(i);
-            customer2.setFirstName();
-            customer2.setLastName();
-            customer2.setEmail();
-            customer2.setCompany();
-            customer2.phone();
+
+            customer2.setLastName("Jay");
+            customer2.setEmail("@jay");
+            customer2.setCompany("JayComp");
+            customer2.setPhone("111-222-3333");
 
             List<Customer> customerList = new ArrayList<>();
             customerList.add(customer);
-            doReturn(customer).when(customerDao).addCustomer(customer2);
-            doReturn(customer).when(customerDao).getCustomer(1);
-            doReturn(customerList).when(customerDao).getAllCustomers();
+            doReturn(customer).when(customerDao).saveCustomer(customer2);
+            doReturn(customer).when(customerDao).findCustomer(1);
+            doReturn(customerList).when(customerDao).findAllCustomer();
         }
 
     private void setUpItemDaoMock() {
-        ItemDao = mock (itemDaoJdbcTemplateImpl.class);
+        itemDao = mock (ItemDaoJdbcTemplateImpl.class);
         Item item= new Item();
         item.setItemId(1);
         item.setName("Computer");
@@ -82,25 +78,25 @@ public class ServiceLayerTest {
         List<Item> itemList = new ArrayList<>();
         itemList.add(item);
 
-        doReturn(item).when(itemDao).addItem(item2);
-        doReturn(item).when(itemDao).getItem(1);
-        doReturn(itemList).when(itemDao).getAllItems();
+        doReturn(item).when(itemDao).saveItem(item2);
+        doReturn(item).when(itemDao).findOne(1);
+        doReturn(itemList).when(itemDao).findAll();
 
     }
-    private void setUpInvoiceDaoMinvoiceItem{
-        invoiceDao = mock (InvoiceDaoImpl.class);
+    private void setUpInvoiceDaoMinvoiceItem(){
+        invoiceDao = mock (InvoiceDaoJdbcTemplateImp.class);
         Invoice  invoice = new Invoice();
         invoice.setInvoiceId(1);
-        invoice.setOrderDate(LocalDate.of(2019,09,12);
-        invoice.setPickUpDate(LocalDate.of(2019,09,12);
-        invoice.setRetunDate(LocalDate.of(2019,09,12);
+        invoice.setOrderDate(LocalDate.of(2019,9,12));
+        invoice.setPickupDate(LocalDate.of(2019,9,12));
+        invoice.setReturnDate(LocalDate.of(2019,9,12));
         invoice.setLateFee(new BigDecimal("12.99"));
 
         Invoice invoice2= new Invoice();
         invoice.setInvoiceId(1);
-        invoice.setOrderDate(LocalDate.of(2019,09,12);
-        invoice.setPickUpDate(LocalDate.of(2019,09,12);
-        invoice.setRetunDate(LocalDate.of(2019,09,12);
+        invoice.setOrderDate(LocalDate.of(2019,9,12));
+        invoice.setPickupDate(LocalDate.of(2019,9,12));
+        invoice.setReturnDate(LocalDate.of(2019,9,12));
         invoice.setLateFee(new BigDecimal("12.99"));
 
         List<Invoice> invoiceList = new ArrayList<>();
@@ -115,23 +111,23 @@ public class ServiceLayerTest {
 
         private void setUpInvoiceItemDaoMock() {
 
-            invoiceItemDao =  mock(invoiceItemDaoJdbcTemplateImpl.class)
+            invoiceItemDao =  mock(InvoiceItemDaoJdbcTemplateImpl.class);
 
         InvoiceItem  invoiceItem = new InvoiceItem();
-        invoiceItem.setinvoiceItemId(1);invoiceItem.setinvoiceItemId(1);
-        invoiceItem.setInvoiceId(1);invoiceItem.setinvoiceItemId(1);
+        invoiceItem.setId(1);
+        invoiceItem.setInvoiceId(1);
         invoiceItem.setItemId(1);
-        invoiceItem.setQantity();
-        invoiceItem.setUnitRate(LocalDate.of(2019,09,12);
-        invoiceItem.setDiscount(LocalDate.of(2019,09,12);
+        invoiceItem.setQuantity(10);
+        invoiceItem.setUnitRate(new BigDecimal("10.99"));
+        invoiceItem.setDiscount(new BigDecimal("0.00"));
 
             InvoiceItem  invoiceItem2 = new InvoiceItem();
-            invoiceItem2.setinvoiceItemId(1);invoiceItem.setinvoiceItemId(1);
-            invoiceItem2.setInvoiceId(1);invoiceItem.setinvoiceItemId(1);
+
+            invoiceItem2.setInvoiceId(1);
             invoiceItem2.setItemId(1);
-            invoiceItem2.setQantity();
-            invoiceItem2.setUnitRate(LocalDate.of(2019,09,12);
-            invoiceItem2.setDiscount(LocalDate.of(2019,09,12);
+            invoiceItem2.setQuantity(10);
+            invoiceItem2.setUnitRate(new BigDecimal("10.99"));
+            invoiceItem2.setDiscount(new BigDecimal("0.00"));
 
 
 
@@ -139,9 +135,9 @@ public class ServiceLayerTest {
 
         List<InvoiceItem> invoiceItemList = new ArrayList<>();
         invoiceItemList.add(invoiceItem);
-        doReturn(invoiceItem).when(invoiceItemDao).addCustomer(invoiceItem2);
-        doReturn(invoiceItem).when(invoiceItemDao).getCustomer(1);
-        doReturn(invoiceItemList).when(invoiceItemDao).getAllInvoiceItem();
+        doReturn(invoiceItem).when(invoiceItemDao).addInvoiceItem(invoiceItem2);
+        doReturn(invoiceItem).when(invoiceItemDao).getInvoiceItem(1);
+        doReturn(invoiceItemList).when(invoiceItemDao).getAllInvoiceItems();
    }
 
 }

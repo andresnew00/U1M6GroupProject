@@ -167,14 +167,25 @@ public class ServiceLayer {
 
     }
 
+    public CustomerInvoiceViewModel findCustomerInvoice(int id) {
+
+        Customer customer = customerDao.findCustomer(id);
+        return buildCustomerInvoice(customer);
+    }
+
     private CustomerInvoiceViewModel buildCustomerInvoice(Customer customer) {
 
         CustomerInvoiceViewModel cvm = new CustomerInvoiceViewModel();
+        cvm.setCustomerFirstName(customer.getFirstName());
+        cvm.setCustomerLastName(customer.getLastName());
+        cvm.setCustomerCompany(customer.getCompany());
+        cvm.setCustomerPhone(customer.getPhone());
+        cvm.setCustomerEmail(customer.getEmail());
 
 //        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
 
         List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter( invoice -> {
-            return invoice.getCustomerId() == customer.getCustomerId();
+            return invoice.getCustomerId() == cvm.getId();
         }).collect(Collectors.toList());
 
         List<List<InvoiceItem>> invoiceItems = new ArrayList<>();

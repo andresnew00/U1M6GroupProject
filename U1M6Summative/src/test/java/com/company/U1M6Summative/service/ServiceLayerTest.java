@@ -6,6 +6,7 @@ import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.dto.InvoiceItem;
 import com.company.U1M6Summative.dto.Item;
 import com.company.U1M6Summative.viewmodel.CustomerInvoiceViewModel;
+import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,8 +39,8 @@ public class ServiceLayerTest {
     // Helper methods
     private void setUpCustomerDaoMock() {
 
-            customerDao  = mock(CustomerDaoImpl.class);
-            Customer customer = new Customer();
+        customerDao = mock(CustomerDaoImpl.class);
+        Customer customer = new Customer();
 
         customer.setCustomerId(1);
         customer.setFirstName("Jay");
@@ -48,12 +49,12 @@ public class ServiceLayerTest {
         customer.setCompany("JayComp");
         customer.setPhone("111-222-3333");
 
-            Customer  customer2 = new Customer();
-            customer2.setFirstName("Jay");
-            customer2.setLastName("Jay");
-            customer2.setEmail("@jay");
-            customer2.setCompany("JayComp");
-            customer2.setPhone("111-222-3333");
+        Customer customer2 = new Customer();
+        customer2.setFirstName("Jay");
+        customer2.setLastName("Jay");
+        customer2.setEmail("@jay");
+        customer2.setCompany("JayComp");
+        customer2.setPhone("111-222-3333");
 
         List<Customer> customerList = new ArrayList<>();
         customerList.add(customer);
@@ -86,17 +87,18 @@ public class ServiceLayerTest {
 
     }
 
-    private void setUpInvoiceDaoMinvoiceItem() {
+    private void setUpInvoiceDaoMock() {
         invoiceDao = mock(InvoiceDaoJdbcTemplateImp.class);
         Invoice invoice = new Invoice();
         invoice.setInvoiceId(1);
+        invoice.setCustomerId(1);
         invoice.setOrderDate(LocalDate.of(2019, 9, 12));
         invoice.setPickupDate(LocalDate.of(2019, 9, 12));
         invoice.setReturnDate(LocalDate.of(2019, 9, 12));
         invoice.setLateFee(new BigDecimal("12.99"));
 
         Invoice invoice2 = new Invoice();
-        invoice.setInvoiceId(1);
+        invoice2.setCustomerId(1);
         invoice.setOrderDate(LocalDate.of(2019, 9, 12));
         invoice.setPickupDate(LocalDate.of(2019, 9, 12));
         invoice.setReturnDate(LocalDate.of(2019, 9, 12));
@@ -106,12 +108,12 @@ public class ServiceLayerTest {
         invoiceList.add(invoice);
         doReturn(invoice).when(invoiceDao).addInvoice(invoice2);
         doReturn(invoice).when(invoiceDao).getInvoice(1);
-        doReturn(invoiceList);
+        doReturn(invoiceList).when(invoiceDao).getAllInvoices();
     }
 
-        private void setUpInvoiceItemDaoMock() {
-            invoiceItemDao =  mock(InvoiceItemDaoJdbcTemplateImpl.class);
-        InvoiceItem  invoiceItem = new InvoiceItem();
+    private void setUpInvoiceItemDaoMock() {
+        invoiceItemDao = mock(InvoiceItemDaoJdbcTemplateImpl.class);
+        InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setId(1);
         invoiceItem.setInvoiceId(1);
         invoiceItem.setItemId(1);
@@ -119,12 +121,12 @@ public class ServiceLayerTest {
         invoiceItem.setUnitRate(new BigDecimal("10.99"));
         invoiceItem.setDiscount(new BigDecimal("0.00"));
 
-            InvoiceItem  invoiceItem2 = new InvoiceItem();
-            invoiceItem2.setInvoiceId(1);
-            invoiceItem2.setItemId(1);
-            invoiceItem2.setQuantity(10);
-            invoiceItem2.setUnitRate(new BigDecimal("10.99"));
-            invoiceItem2.setDiscount(new BigDecimal("0.00"));
+        InvoiceItem invoiceItem2 = new InvoiceItem();
+        invoiceItem2.setInvoiceId(1);
+        invoiceItem2.setItemId(1);
+        invoiceItem2.setQuantity(10);
+        invoiceItem2.setUnitRate(new BigDecimal("10.99"));
+        invoiceItem2.setDiscount(new BigDecimal("0.00"));
 
         List<InvoiceItem> invoiceItemList = new ArrayList<>();
         invoiceItemList.add(invoiceItem);
@@ -138,7 +140,7 @@ public class ServiceLayerTest {
         setUpCustomerDaoMock();
         setUpItemDaoMock();
         setUpInvoiceItemDaoMock();
-        setUpInvoiceItemDaoMock();
+        setUpInvoiceDaoMock();
         service = new ServiceLayer(customerDao, invoiceDao, invoiceItemDao, itemDao);
     }
 
@@ -154,7 +156,7 @@ public class ServiceLayerTest {
     }
 
     @Test
-    public void findCustomer(){
+    public void findCustomer() {
         Customer customer = new Customer();
         customer.setFirstName("Jay");
         customer.setLastName("Jay");
@@ -165,8 +167,9 @@ public class ServiceLayerTest {
         Customer fromService = service.findCustomer(customer.getCustomerId());
         assertEquals(customer, fromService);
     }
+
     @Test
-    public void findAllCustomers(){
+    public void findAllCustomers() {
         Customer customer = new Customer();
         customer.setFirstName("Jay");
         customer.setLastName("Jay");
@@ -178,6 +181,7 @@ public class ServiceLayerTest {
         assertEquals(1, customerList.size());
         assertEquals(customer, customerList.get(0));
     }
+
     @Test
     public void updateCustomer() {
         Customer customer = new Customer();
@@ -189,10 +193,11 @@ public class ServiceLayerTest {
         ArgumentCaptor<Customer> customerCaptor = ArgumentCaptor.forClass(Customer.class);
         doNothing().when(customerDao).updateCustomer(customerCaptor.capture());
         service.updateCustomer(customer);
-        verify(customerDao,times(1)).updateCustomer(customerCaptor.getValue());
+        verify(customerDao, times(1)).updateCustomer(customerCaptor.getValue());
         Customer customer2 = customerCaptor.getValue();
-        assertEquals(customer ,customer2);
+        assertEquals(customer, customer2);
     }
+
     @Test
     public void deleteCustomer() {
         Customer customer = new Customer();
@@ -215,8 +220,9 @@ public class ServiceLayerTest {
         item.setDailyRate(new BigDecimal(1200.99));
         item = service.saveItem(item);
     }
+
     @Test
-    public void findItem(){
+    public void findItem() {
         Item item = new Item();
         item.setItemId(1);
         item.setName("Computer");
@@ -225,8 +231,9 @@ public class ServiceLayerTest {
         Item fromService = service.findItem(item.getItemId());
         assertEquals(item, fromService);
     }
+
     @Test
-    public void findAllItem(){
+    public void findAllItem() {
         Item item = new Item();
         item.setItemId(1);
         item.setName("Computer");
@@ -236,6 +243,7 @@ public class ServiceLayerTest {
         assertEquals(1, itemList.size());
         assertEquals(item, itemList.get(0));
     }
+
     @Test
     public void updateItem() {
         Item item = new Item();
@@ -246,12 +254,13 @@ public class ServiceLayerTest {
         ArgumentCaptor<Item> itemCaptor = ArgumentCaptor.forClass(Item.class);
         doNothing().when(itemDao).updateItem(itemCaptor.capture());
         service.updateItem(item);
-        verify(itemDao,times(1)).updateItem(itemCaptor.getValue());
+        verify(itemDao, times(1)).updateItem(itemCaptor.getValue());
         Item item2 = itemCaptor.getValue();
         assertEquals(item, item2);
     }
+
     @Test
-    public void deleteItem(){
+    public void deleteItem() {
         Item item = new Item();
         item.setItemId(1);
         item.setName("Computer");
@@ -276,18 +285,26 @@ public class ServiceLayerTest {
         cvm.setCustomerCompany("JayComp");
         cvm.setCustomerPhone("111-222-3333");
         Invoice invoice = new Invoice();
-        invoice.setCustomerId(cvm.getId());
+        invoice.setCustomerId(1);
         invoice.setOrderDate(LocalDate.of(2019, 9, 12));
         invoice.setPickupDate(LocalDate.of(2019, 9, 12));
         invoice.setReturnDate(LocalDate.of(2019, 9, 12));
         invoice.setLateFee(new BigDecimal("12.99"));
         service.saveInvoice(invoice);
+        InvoiceItem invoiceItem2 = new InvoiceItem();
+        invoiceItem2.setInvoiceId(1);
+        invoiceItem2.setItemId(1);
+        invoiceItem2.setQuantity(10);
+        invoiceItem2.setUnitRate(new BigDecimal("10.99"));
+        invoiceItem2.setDiscount(new BigDecimal("0.00"));
+        service.saveInvoiceItem(invoiceItem2);
+        List<List<InvoiceItem>> container = new ArrayList<>();
+//        container.set(0, new ArrayList<>());
+        container.add(service.getAllInvoiceItems());
         cvm.setInvoices(service.findAllInvoices());
+        cvm.setInvoiceItems(container);
         cvm = service.saveCustomer(cvm);
     }
-
-
-
 
 
 //    @Test
@@ -339,11 +356,6 @@ public class ServiceLayerTest {
 //    }
 
 }
-
-
-
-
-
 
 
 // *Your REST API must allow the end user to:

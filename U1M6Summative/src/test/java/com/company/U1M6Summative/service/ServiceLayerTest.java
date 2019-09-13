@@ -150,7 +150,7 @@ public class ServiceLayerTest {
         setUpItemDaoMock();
         setUpInvoiceDaoMinvoiceItem();
         setUpInvoiceItemDaoMock();
-        service = new ServiceLayer(customerDao, itemDao, invoiceDao, invoiceItemDao);
+        service = new ServiceLayer(customerDao, invoiceDao, invoiceItemDao, itemDao);
     }
 
     @Test
@@ -173,11 +173,11 @@ public class ServiceLayerTest {
         customer.setLastName("Jay");
         customer.setEmail("@jay");
         customer.setCompany("JayComp");
-        customer.setPhone("111-222-3333")
+        customer.setPhone("111-222-3333");
 
         Customer fromService = service.findCustomer(customer.getCustomerId());
         assertEquals(customer, fromService);
-        List<Customer> customerList = service.findAllCustomer();
+        List<Customer> customerList = service.findAllCustomers();
         assertEquals(1, customerList.size());
         assertEquals(customer, customerList.get(0));
     }
@@ -190,7 +190,7 @@ public class ServiceLayerTest {
         customer.setLastName("Jay");
         customer.setEmail("@jay");
         customer.setCompany("JayComp");
-        customer.setPhone("111-222-3333")
+        customer.setPhone("111-222-3333");
 
         Customer fromService = service.findCustomer(customer.getCustomerId());
         assertEquals(customer, fromService);

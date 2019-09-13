@@ -216,7 +216,7 @@ public class ServiceLayerTest {
         item.setName("Computer");
         item.setDescription("Mack Pro");
         item.setDailyRate(new BigDecimal(1200.99));
-        item fromService = service.findItem(item.getItemId());
+        Item fromService = service.findItem(item.getItemId());
         assertEquals(item, fromService);
     }
     @Test
@@ -300,7 +300,6 @@ public class ServiceLayerTest {
         invoiceItem.setQuantity(10);
         invoiceItem.setUnitRate(new BigDecimal("10.99"));
         invoiceItem.setDiscount(new BigDecimal("0.00"));
-        invoiceItem.setDailyRate(new BigDecimal(1200.99));
         invoiceItem = service.saveItem(invoiceItem);
 
         ArgumentCaptor<Integer> integerCaptor = ArgumentCaptor.forClass(Integer.class);

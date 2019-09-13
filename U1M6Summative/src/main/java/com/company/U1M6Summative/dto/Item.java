@@ -1,12 +1,20 @@
 package com.company.U1M6Summative.dto;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Item {
+
+    @Max(11)
     private int itemId;
+    @Size(min=0, max=50)
     private String name;
+    @Size(min=0, max=255)
     private String description;
+    @Digits(integer = 8, fraction = 2)
     private BigDecimal dailyRate;
 
     public int getItemId() {

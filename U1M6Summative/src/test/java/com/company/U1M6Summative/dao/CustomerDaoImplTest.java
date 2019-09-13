@@ -1,6 +1,8 @@
 package com.company.U1M6Summative.dao;
 
 import com.company.U1M6Summative.dto.Customer;
+import com.company.U1M6Summative.dto.Invoice;
+import com.company.U1M6Summative.dto.InvoiceItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +24,33 @@ public class CustomerDaoImplTest {
 
     private Customer customer, customer2;
 
+    @Autowired
+    private ItemDao itemDao;
+
+    @Autowired
+    private InvoiceItemDao invoiceItemDao;
+
+    @Autowired
+    InvoiceDao invoiceDao;
+
 
     @Before
     public void setUp() throws Exception {
 
+
+        invoiceItemDao.getAllInvoiceItems().forEach(invoiceItem -> {
+            invoiceItemDao.deleteInvoiceItem(invoiceItem.getId());
+        });
+        invoiceDao.getAllInvoices().forEach(invoice -> {
+            invoiceDao.deleteInvoice(invoice.getInvoiceId());
+        });
+        itemDao.findAll().forEach(item -> {
+            itemDao.deleteItem(item.getItemId());
+        });
         customerDao.findAllCustomer().forEach(customer -> {
             customerDao.deleteCustomer(customer.getCustomerId());
         });
+
 
         customer = new Customer();
         customer.setFirstName("Jay");
@@ -78,7 +100,7 @@ public class CustomerDaoImplTest {
         customerDao.saveCustomer(customer);
         customer.setLastName("updatedlastname");
         Customer newCustomer = customerDao.findCustomer(customer.getCustomerId());
-        assertNotEquals(customer,newCustomer);
+        assertNotEquals(customer, newCustomer);
 
     }
 

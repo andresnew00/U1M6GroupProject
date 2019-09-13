@@ -90,19 +90,45 @@ public class ServiceLayer {
         return customerDao.saveCustomer(customer);
     }
 
+    public void updateCustomer(Customer customer) {
+        customerDao.updateCustomer(customer);
+    }
+
+    public void deleteCustomer(int id) {
+        customerDao.deleteCustomer(id);
+    }
+
+    public Invoice findInvoice(int id) {
+        return invoiceDao.getInvoice(id);
+    }
+
+    public List<Invoice> findAllInvoices() {
+        return invoiceDao.getAllInvoices();
+    }
+
+    public Invoice saveInvoice(Invoice invoice) {
+        return invoiceDao.addInvoice(invoice);
+    }
+
+    public void deleteInvoice(int id) {
+        invoiceDao.deleteInvoice(id);
+    }
+
+    public void updateInvoice(Invoice invoice) {
+        invoiceDao.updateInvoice(invoice);
+    }
+
+
     private InvoiceItemViewModel buildViewModel(Invoice invoice) {
 
         InvoiceItemViewModel viewModel = new InvoiceItemViewModel();
-
         List<Item> items = itemDao.findAllByInvoiceItem(invoice.getInvoiceId());
         Customer customer = customerDao.findCustomer(invoice.getCustomerId());
         List<InvoiceItem> invoiceItem = invoiceItemDao.getAllByInvoiceId(invoice.getInvoiceId());
 
         viewModel.setCustomer(customer);
         viewModel.setItem(items);
-
         viewModel.setUnitRate(items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
-
         viewModel.setDiscount(new BigDecimal(0.00));
 
         return viewModel;

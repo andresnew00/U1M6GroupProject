@@ -152,11 +152,8 @@ public class ServiceLayer {
         customer = customerDao.saveCustomer(customer);
         customerInvoiceViewModel.setId(customer.getCustomerId());
 
-        List<Invoice> invoices = customerInvoiceViewModel.getInvoices();
-        List<List<InvoiceItem>> invoiceItems = customerInvoiceViewModel.getInvoiceItems();
-        invoices.stream().forEach( invoice -> {
-            invoice.setCustomerId(customerInvoiceViewModel.getId());
-        });
+        List<Invoice> invoices = invoiceDao.getAllInvoices().stream().filter(invoice -> invoice.getCustomerId() == customerInvoiceViewModel.getId()).collect(Collectors.toList());
+        List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
 
         for (int i = 0; i < invoices.size(); i++) {
             List<InvoiceItem> invoiceItemAtId = invoiceItemDao.getAllByInvoiceId(invoices.get(i).getInvoiceId());
@@ -170,17 +167,29 @@ public class ServiceLayer {
 
     }
 
+    public CustomerInvoiceViewModel findCustomerInvoice(int id) {
+
+        Customer customer = customerDao.findCustomer(id);
+        return buildCustomerInvoice(customer);
+    }
+
     private CustomerInvoiceViewModel buildCustomerInvoice(Customer customer) {
 
         CustomerInvoiceViewModel cvm = new CustomerInvoiceViewModel();
+        cvm.setCustomerFirstName(customer.getFirstName());
+        cvm.setCustomerLastName(customer.getLastName());
+        cvm.setCustomerCompany(customer.getCompany());
+        cvm.setCustomerPhone(customer.getPhone());
+        cvm.setCustomerEmail(customer.getEmail());
 
 //        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
 
         List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter( invoice -> {
-            return invoice.getCustomerId() == customer.getCustomerId();
+            return invoice.getCustomerId() == cvm.getId();
         }).collect(Collectors.toList());
 
         List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
+
         for (int i = 0; i < customersInvoices.size(); i++) {
             invoiceItems.add(invoiceItemDao.getAllByInvoiceId(customersInvoices.get(i).getInvoiceId()));
         }
@@ -189,7 +198,7 @@ public class ServiceLayer {
         cvm.setInvoiceItems(invoiceItems);
 
         return cvm;
-    }
 
+    }
 
 }

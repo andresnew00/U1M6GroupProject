@@ -8,11 +8,11 @@ import java.util.Objects;
 
 public class Item {
 
-    @Size(max=11)
+
     private int itemId;
-    @Size(min=0, max=50)
+    @Size(min=1, max=50)
     private String name;
-    @Size(min=0, max=255)
+    @Size(min=1, max=255)
     private String description;
     @Digits(integer = 8, fraction = 2)
     private BigDecimal dailyRate;

@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/item")
+@RequestMapping(value = "/Item")
 public class ItemController {
 
     @Autowired
@@ -51,7 +51,7 @@ public class ItemController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteCity(@PathVariable int id) {
-        if (service.getAllItems().contains(id)) {
+        if (service.getAllItems().contains(service.findItem(id))) {
             service.deleteItem(id);
         } else {
             throw new IllegalArgumentException("Item ID not Found");

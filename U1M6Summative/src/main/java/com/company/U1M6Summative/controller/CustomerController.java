@@ -13,34 +13,30 @@ import javax.validation.Valid;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/Customer")
 public class CustomerController {
 
-    @Autowired
-    CustomerDao customerDao;
+
 
     @Autowired
-    InvoiceDao invoiceDao;
+    ServiceLayer service;
 
-    @Autowired
-    ServiceLayer serviceLayer;
-
-    private List<Customer> customerList = new ArrayList<Customer>();
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public Customer addCustomer(@RequestBody @Valid Customer customer) {
-        return customerDao.saveCustomer(customer);
+        return service.saveCustomer(customer);
 
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public List<Customer> getAllCustomers() {
-        if (customerDao.findAllCustomer().size() > 0) {
-            return customerDao.findAllCustomer();
+        if (service.findAllCustomers().size() > 0) {
+            return service.findAllCustomers();
         } else {
             throw new IllegalArgumentException("Customers not found.");
         }
@@ -49,31 +45,31 @@ public class CustomerController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public Customer getCustomer(@PathVariable int id) {
-        return customerDao.findCustomer(id);
+        return service.findCustomer(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     public void updateCustomer(@PathVariable int id, @RequestBody @Valid Customer updated) {
         updated.setCustomerId(id);
-        customerDao.updateCustomer(updated);
+        service.updateCustomer(updated);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteCity(@PathVariable int id) {
-        if (customerDao.findAllCustomer().contains(id)) {
-            customerDao.deleteCustomer(id);
+        if (service.findAllCustomers().contains(id)) {
+            service.deleteCustomer(id);
         } else {
             throw new IllegalArgumentException("Customer ID not Found");
 
         }
     }
-
-//    @RequestMapping(value = "/{customerid}/{invoiceId}", method = RequestMethod.GET)
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public Invoice getInvoice(@PathVariable int id,@PathVariable int invoiceId) {
-//        return serviceLayer.i
-//    }
-
+//get invoices by customer
+    @RequestMapping(value = "/{customerid}/{invoiceId}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Invoice> getInvoiceByCustomer(@PathVariable int id,@PathVariable int invoiceId) {
+        return service.findAllInvoices().stream().filter
+                (invoice -> invoice.getCustomerId()==id).collect(Collectors.toList());
+    }
 }

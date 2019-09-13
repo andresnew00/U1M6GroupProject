@@ -78,6 +78,18 @@ public class ServiceLayer {
         return invoiceItemDao.getAllInvoiceItems();
     }
 
+    public Customer findCustomer(int id) {
+        return customerDao.findCustomer(id);
+    }
+
+    public List<Customer> findAllCustomers() {
+        return customerDao.findAllCustomer();
+    }
+
+    public Customer saveCustomer(Customer customer) {
+        return customerDao.saveCustomer(customer);
+    }
+
     private InvoiceItemViewModel buildViewModel(Invoice invoice) {
 
         InvoiceItemViewModel viewModel = new InvoiceItemViewModel();

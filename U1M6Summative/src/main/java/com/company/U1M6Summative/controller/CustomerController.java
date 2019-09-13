@@ -5,6 +5,7 @@ import com.company.U1M6Summative.dao.InvoiceDao;
 import com.company.U1M6Summative.dto.Customer;
 import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.service.ServiceLayer;
+import com.company.U1M6Summative.viewmodel.CustomerInvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -68,8 +69,7 @@ public class CustomerController {
 //get invoices by customer
     @RequestMapping(value = "/GetInvoice/{customerId}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Invoice> getInvoiceByCustomer(@PathVariable int customerId) {
-        return service.findAllInvoices().stream().filter
-                (invoice -> invoice.getCustomerId()==customerId).collect(Collectors.toList());
+    public CustomerInvoiceViewModel getInvoiceByCustomer(@PathVariable int customerId) {
+        return service.findCustomerInvoice(customerId);
     }
 }

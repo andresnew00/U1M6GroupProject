@@ -29,11 +29,11 @@ Give an example
 
 ## Authors
 
-* **Gilbert Medina** - *Initial work* - [JayMedina0](https://github.com/JayMedina0)
-* **Patrick Hussey** - *Initial work* - [Husspm](https://github.com/Husspm)
-* **Andres Inciarte** - *Initial work* - [andresnew00](https://github.com/andresnew00)
-* **Delcie Dion** - *Initial work* - [dcdi22](https://github.com/dcdi22)
-* **Ahmed Kaahin** - *Initial work* - [akahin](https://github.com/akahin)
+* **Gilbert Medina** - *Customer* - [JayMedina0](https://github.com/JayMedina0)
+* **Patrick Hussey** - *Item* - [Husspm](https://github.com/Husspm)
+* **Andres Inciarte** - *Invoice* - [andresnew00](https://github.com/andresnew00)
+* **Delcie Dion** - *Invoice Item* - [dcdi22](https://github.com/dcdi22)
+* **Ahmed Kaahin** - *Testing* - [akahin](https://github.com/akahin)
 
 ## Acknowledgments
 

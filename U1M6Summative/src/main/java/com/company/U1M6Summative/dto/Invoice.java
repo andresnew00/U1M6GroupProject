@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class Invoice {
 
+
     private Integer invoiceId;
     private Integer customerId;
     private LocalDate orderDate;

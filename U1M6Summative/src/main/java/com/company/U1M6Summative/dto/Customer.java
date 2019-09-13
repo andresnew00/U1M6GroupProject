@@ -1,14 +1,22 @@
 package com.company.U1M6Summative.dto;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Customer {
 
+    @Max(11)
     private int customerId;
+    @Size(min=1, max=50)
     private String firstName;
+    @Size(min=1, max=50)
     private String lastName;
+    @Size(min=1, max=75)
     private String email;
+    @Size(min=1, max=50)
     private String company;
+    @Size(min=1, max=50)
     private String phone;
 
 

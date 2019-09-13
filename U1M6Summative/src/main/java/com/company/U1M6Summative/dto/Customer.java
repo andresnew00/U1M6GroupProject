@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Customer {
 
-    @Max(11)
+    @Size(max=11)
     private int customerId;
     @Size(min=1, max=50)
     private String firstName;

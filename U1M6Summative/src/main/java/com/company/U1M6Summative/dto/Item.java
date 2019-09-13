@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Item {
 
-    @Max(11)
+    @Size(max=11)
     private int itemId;
     @Size(min=0, max=50)
     private String name;

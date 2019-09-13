@@ -18,7 +18,7 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return customerId == customer.customerId &&
+        return (customerId == customer.customerId) &&
                 firstName.equals(customer.firstName) &&
                 lastName.equals(customer.lastName) &&
                 email.equals(customer.email) &&

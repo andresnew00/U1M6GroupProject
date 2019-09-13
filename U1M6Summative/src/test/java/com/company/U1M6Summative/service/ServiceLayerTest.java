@@ -139,7 +139,7 @@ public class ServiceLayerTest {
         setUpItemDaoMock();
         setUpInvoiceItemDaoMock();
         setUpInvoiceItemDaoMock();
-        service = new ServiceLayer(customerDao, invoiceDao, invoiceItemDao,itemDao);
+        service = new ServiceLayer(customerDao, invoiceDao, invoiceItemDao, itemDao);
     }
 
 
@@ -264,6 +264,28 @@ public class ServiceLayerTest {
         item.setItemId(10);
         assertEquals(10, integerCaptor.getValue().intValue());
     }
+
+
+    @Test
+    public void testViewModel() {
+
+        CustomerInvoiceViewModel cvm = new CustomerInvoiceViewModel();
+        cvm.setCustomerFirstName("Jay");
+        cvm.setCustomerLastName("Jay");
+        cvm.setCustomerEmail("@jay");
+        cvm.setCustomerCompany("JayComp");
+        cvm.setCustomerPhone("111-222-3333");
+        Invoice invoice = new Invoice();
+        invoice.setCustomerId(cvm.getId());
+        invoice.setOrderDate(LocalDate.of(2019, 9, 12));
+        invoice.setPickupDate(LocalDate.of(2019, 9, 12));
+        invoice.setReturnDate(LocalDate.of(2019, 9, 12));
+        invoice.setLateFee(new BigDecimal("12.99"));
+        service.saveInvoice(invoice);
+        cvm.setInvoices(service.findAllInvoices());
+        cvm = service.saveCustomer(cvm);
+    }
+
 
 
 

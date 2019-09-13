@@ -141,11 +141,40 @@ public class ServiceLayer {
 
     }
 
+    public CustomerInvoiceViewModel saveCustomer(CustomerInvoiceViewModel customerInvoiceViewModel) {
+
+        Customer customer = new Customer();
+        customer.setFirstName(customerInvoiceViewModel.getCustomerFirstName());
+        customer.setLastName(customerInvoiceViewModel.getCustomerLastName());
+        customer.setCompany(customerInvoiceViewModel.getCustomerCompany());
+        customer.setEmail(customerInvoiceViewModel.getCustomerEmail());
+        customer.setPhone(customerInvoiceViewModel.getCustomerPhone());
+        customer = customerDao.saveCustomer(customer);
+        customerInvoiceViewModel.setId(customer.getCustomerId());
+
+        List<Invoice> invoices = customerInvoiceViewModel.getInvoices();
+        List<List<InvoiceItem>> invoiceItems = customerInvoiceViewModel.getInvoiceItems();
+        invoices.stream().forEach( invoice -> {
+            invoice.setCustomerId(customerInvoiceViewModel.getId());
+        });
+
+        for (int i = 0; i < invoices.size(); i++) {
+            List<InvoiceItem> invoiceItemAtId = invoiceItemDao.getAllByInvoiceId(invoices.get(i).getInvoiceId());
+            invoiceItems.add(invoiceItemAtId);
+        }
+
+        customerInvoiceViewModel.setDiscount(new BigDecimal("0"));
+        customerInvoiceViewModel.setUnitRate(new BigDecimal("0"));
+
+        return customerInvoiceViewModel;
+
+    }
+
     private CustomerInvoiceViewModel buildCustomerInvoice(Customer customer) {
 
         CustomerInvoiceViewModel cvm = new CustomerInvoiceViewModel();
 
-        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
+//        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
 
         List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter( invoice -> {
             return invoice.getCustomerId() == customer.getCustomerId();

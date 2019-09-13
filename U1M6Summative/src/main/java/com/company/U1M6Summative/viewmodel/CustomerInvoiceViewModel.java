@@ -8,7 +8,11 @@ import java.util.List;
 
 public class CustomerInvoiceViewModel {
     private int id;
-    private String customerName;
+    private String customerFirstName;
+    private String customerLastName;
+    private String customerEmail;
+    private String customerCompany;
+    private String customerPhone;
     private List<Invoice> invoices;
     private List<List<InvoiceItem>> invoiceItems;
     private BigDecimal unitRate;
@@ -22,12 +26,20 @@ public class CustomerInvoiceViewModel {
         this.id = id;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getCustomerFirstName() {
+        return customerFirstName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setCustomerFirstName(String customerName) {
+        this.customerFirstName = customerName;
+    }
+
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    public void setCustomerLastName(String customerLasttName) {
+        this.customerLastName = customerLasttName;
     }
 
     public List<Invoice> getInvoices() {
@@ -60,5 +72,29 @@ public class CustomerInvoiceViewModel {
 
     public void setDiscount(BigDecimal discount) {
         this.discount = discount;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    public String getCustomerCompany() {
+        return customerCompany;
+    }
+
+    public void setCustomerCompany(String customerCompany) {
+        this.customerCompany = customerCompany;
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
     }
 }

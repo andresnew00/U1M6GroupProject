@@ -21,11 +21,6 @@ public class CustomerDaoImpl implements CustomerDao{
 
     private JdbcTemplate sql;
 
-    //   first_name varchar(50) not null,
-    //    last_name varchar(50) not null,
-    //    email varchar(75) not null,
-    //    company varchar(50) not null,
-    //    phone
 
 
     @Autowired
@@ -67,7 +62,7 @@ public class CustomerDaoImpl implements CustomerDao{
     private String UPDATE_CUSTOMER_SQL=
             "UPDATE customer SET first_name=?, last_name=?, email=?, company=?,phone=?) WHERE customer.customer_id=?";
     private String DELETE_CUSTOMER_SQL=
-            "DELETE FROM customer WHERE customer.customer_id=?";
+            "DELETE FROM customer WHERE customer_id=?";
 
 
     @Override

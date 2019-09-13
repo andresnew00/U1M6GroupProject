@@ -125,21 +125,16 @@ public class ServiceLayer {
         return buildCustomerInvoice(customerDao.findCustomer(id));
     }
 
-
-
     private InvoiceItemViewModel buildViewModel(Invoice invoice) {
 
         InvoiceItemViewModel viewModel = new InvoiceItemViewModel();
-
         List<Item> items = itemDao.findAllByInvoiceItem(invoice.getInvoiceId());
         Customer customer = customerDao.findCustomer(invoice.getCustomerId());
         List<InvoiceItem> invoiceItem = invoiceItemDao.getAllByInvoiceId(invoice.getInvoiceId());
 
         viewModel.setCustomer(customer);
         viewModel.setItem(items);
-
         viewModel.setUnitRate(items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
-
         viewModel.setDiscount(new BigDecimal(0.00));
 
         return viewModel;

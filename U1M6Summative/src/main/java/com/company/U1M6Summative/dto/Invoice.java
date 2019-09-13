@@ -67,7 +67,7 @@ public class Invoice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
-        return invoiceId.equals(invoice.invoiceId) &&
+        return Objects.equals(invoiceId, invoice.invoiceId) &&
                 customerId.equals(invoice.customerId) &&
                 orderDate.equals(invoice.orderDate) &&
                 pickupDate.equals(invoice.pickupDate) &&

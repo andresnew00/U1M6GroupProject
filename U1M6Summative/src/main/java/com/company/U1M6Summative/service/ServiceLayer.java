@@ -8,12 +8,15 @@ import com.company.U1M6Summative.dto.Customer;
 import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.dto.InvoiceItem;
 import com.company.U1M6Summative.dto.Item;
+import com.company.U1M6Summative.viewmodel.CustomerInvoiceViewModel;
 import com.company.U1M6Summative.viewmodel.InvoiceItemViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by ahmedkaahin on 9/12/19.
@@ -118,6 +121,9 @@ public class ServiceLayer {
         invoiceDao.updateInvoice(invoice);
     }
 
+    public CustomerInvoiceViewModel getInvoice(int id) {
+        return buildCustomerInvoice(customerDao.findCustomer(id));
+    }
 
     private InvoiceItemViewModel buildViewModel(Invoice invoice) {
 
@@ -133,6 +139,56 @@ public class ServiceLayer {
 
         return viewModel;
 
+    }
+
+    public CustomerInvoiceViewModel saveCustomer(CustomerInvoiceViewModel customerInvoiceViewModel) {
+
+        Customer customer = new Customer();
+        customer.setFirstName(customerInvoiceViewModel.getCustomerFirstName());
+        customer.setLastName(customerInvoiceViewModel.getCustomerLastName());
+        customer.setCompany(customerInvoiceViewModel.getCustomerCompany());
+        customer.setEmail(customerInvoiceViewModel.getCustomerEmail());
+        customer.setPhone(customerInvoiceViewModel.getCustomerPhone());
+        customer = customerDao.saveCustomer(customer);
+        customerInvoiceViewModel.setId(customer.getCustomerId());
+
+        List<Invoice> invoices = customerInvoiceViewModel.getInvoices();
+        List<List<InvoiceItem>> invoiceItems = customerInvoiceViewModel.getInvoiceItems();
+        invoices.stream().forEach( invoice -> {
+            invoice.setCustomerId(customerInvoiceViewModel.getId());
+        });
+
+        for (int i = 0; i < invoices.size(); i++) {
+            List<InvoiceItem> invoiceItemAtId = invoiceItemDao.getAllByInvoiceId(invoices.get(i).getInvoiceId());
+            invoiceItems.add(invoiceItemAtId);
+        }
+
+        customerInvoiceViewModel.setDiscount(new BigDecimal("0"));
+        customerInvoiceViewModel.setUnitRate(new BigDecimal("0"));
+
+        return customerInvoiceViewModel;
+
+    }
+
+    private CustomerInvoiceViewModel buildCustomerInvoice(Customer customer) {
+
+        CustomerInvoiceViewModel cvm = new CustomerInvoiceViewModel();
+
+//        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
+
+        List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter( invoice -> {
+            return invoice.getCustomerId() == customer.getCustomerId();
+        }).collect(Collectors.toList());
+
+        List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
+        for (int i = 0; i < customersInvoices.size(); i++) {
+            invoiceItems.add(invoiceItemDao.getAllByInvoiceId(customersInvoices.get(i).getInvoiceId()));
+        }
+
+        cvm.setInvoices(customersInvoices);
+        cvm.setInvoiceItems(invoiceItems);
+
+        return cvm;
     }
 
 

@@ -152,11 +152,8 @@ public class ServiceLayer {
         customer = customerDao.saveCustomer(customer);
         customerInvoiceViewModel.setId(customer.getCustomerId());
 
-        List<Invoice> invoices = customerInvoiceViewModel.getInvoices();
-        List<List<InvoiceItem>> invoiceItems = customerInvoiceViewModel.getInvoiceItems();
-        invoices.stream().forEach( invoice -> {
-            invoice.setCustomerId(customerInvoiceViewModel.getId());
-        });
+        List<Invoice> invoices = invoiceDao.getAllInvoices().stream().filter(invoice -> invoice.getCustomerId() == customerInvoiceViewModel.getId()).collect(Collectors.toList());
+        List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
 
         for (int i = 0; i < invoices.size(); i++) {
             List<InvoiceItem> invoiceItemAtId = invoiceItemDao.getAllByInvoiceId(invoices.get(i).getInvoiceId());
@@ -181,6 +178,7 @@ public class ServiceLayer {
         }).collect(Collectors.toList());
 
         List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
+
         for (int i = 0; i < customersInvoices.size(); i++) {
             invoiceItems.add(invoiceItemDao.getAllByInvoiceId(customersInvoices.get(i).getInvoiceId()));
         }
@@ -189,7 +187,7 @@ public class ServiceLayer {
         cvm.setInvoiceItems(invoiceItems);
 
         return cvm;
-    }
 
+    }
 
 }

@@ -78,6 +78,18 @@ public class ServiceLayer {
         return invoiceItemDao.getAllInvoiceItems();
     }
 
+    public Customer findCustomer(int id) {
+        return customerDao.findCustomer(id);
+    }
+
+    public List<Customer> findAllCustomers() {
+        return customerDao.findAllCustomer();
+    }
+
+    public Customer saveCustomer(Customer customer) {
+        return customerDao.saveCustomer(customer);
+    }
+
     private InvoiceItemViewModel buildViewModel(Invoice invoice) {
 
         InvoiceItemViewModel viewModel = new InvoiceItemViewModel();
@@ -89,7 +101,7 @@ public class ServiceLayer {
         viewModel.setCustomer(customer);
         viewModel.setItem(items);
 
-        viewModel.setUnitRate( items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
+        viewModel.setUnitRate(items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
 
         viewModel.setDiscount(new BigDecimal(0.00));
 

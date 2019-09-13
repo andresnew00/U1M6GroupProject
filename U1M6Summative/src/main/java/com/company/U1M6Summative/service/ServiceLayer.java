@@ -8,12 +8,15 @@ import com.company.U1M6Summative.dto.Customer;
 import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.dto.InvoiceItem;
 import com.company.U1M6Summative.dto.Item;
+import com.company.U1M6Summative.viewmodel.CustomerInvoiceViewModel;
 import com.company.U1M6Summative.viewmodel.InvoiceItemViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by ahmedkaahin on 9/12/19.
@@ -118,7 +121,9 @@ public class ServiceLayer {
         invoiceDao.updateInvoice(invoice);
     }
 
-
+    public CustomerInvoiceViewModel getInvoice(int id) {
+        return buildCustomerInvoice(customerDao.findCustomer(id));
+    }
 
 
 
@@ -139,6 +144,27 @@ public class ServiceLayer {
 
         return viewModel;
 
+    }
+
+    private CustomerInvoiceViewModel buildCustomerInvoice(Customer customer) {
+
+        CustomerInvoiceViewModel cvm = new CustomerInvoiceViewModel();
+
+        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
+
+        List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter( invoice -> {
+            return invoice.getCustomerId() == customer.getCustomerId();
+        }).collect(Collectors.toList());
+
+        List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
+        for (int i = 0; i < customersInvoices.size(); i++) {
+            invoiceItems.add(invoiceItemDao.getAllByInvoiceId(customersInvoices.get(i).getInvoiceId()));
+        }
+
+        cvm.setInvoices(customersInvoices);
+        cvm.setInvoiceItems(invoiceItems);
+
+        return cvm;
     }
 
 

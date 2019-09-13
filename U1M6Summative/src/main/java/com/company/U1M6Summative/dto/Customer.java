@@ -1,5 +1,7 @@
 package com.company.U1M6Summative.dto;
 
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Customer {

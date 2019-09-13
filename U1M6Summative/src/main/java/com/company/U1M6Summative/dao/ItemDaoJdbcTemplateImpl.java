@@ -89,23 +89,27 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao {
     private Item mapItemToRow(ResultSet set, int rowNumber) throws SQLException {
 
         List<String> columnNames = new ArrayList<>();
-
+        //loop through the metaData and get all the column names in the table
         for (int i = 1; i <= set.getMetaData().getColumnCount(); i++) {
             columnNames.add(set.getMetaData().getColumnName(i));
         }
-
+        //sort the column names alphabetically
         columnNames = columnNames.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
-
+        //loop through all the methods in the class, since they may come back in any order, sort them alphabetically
         List<Method> setters = Arrays.stream(Item.class.getMethods()).filter(method -> method.getName().contains("set")).
                 sorted(Comparator.comparing(Method::getName)).collect(Collectors.toList());
-
+        //now that the methods and column names are both sorted, they should correspond to each other
         Item item = new Item();
 
+        //call the setter methods using reflection instead of the dot operator on the item instance
+        //notice the syntax, call invoke on the method directly and pass in the instance of the object we created
         for (int i = 0; i < setters.size(); i++) {
             try {
                 if (setters.get(i).getParameterTypes()[0].getSimpleName().equalsIgnoreCase("localdate")) {
+                    //if the setter expects a date convert it to a date object
                     setters.get(i).invoke(item, set.getDate(columnNames.get(i)).toLocalDate());
                 } else {
+                    //else set the property directly, no extra methods are need
                     setters.get(i).invoke(item, set.getObject(columnNames.get(i)));
                 }
             } catch (IllegalAccessException | InvocationTargetException e) {

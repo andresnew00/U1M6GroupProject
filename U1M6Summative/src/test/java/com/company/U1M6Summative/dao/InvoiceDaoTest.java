@@ -30,6 +30,11 @@ public class InvoiceDaoTest {
 
     @Before
     public void setUp() throws Exception {
+        CustomerDao.getAllInvoices().forEach(invoice -> {
+            invoiceDao.deleteInvoice(invoice.getInvoiceId());
+        });
+
+
         invoiceDao.getAllInvoices().forEach(invoice -> {
             invoiceDao.deleteInvoice(invoice.getInvoiceId());
         });

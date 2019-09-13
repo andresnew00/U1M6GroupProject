@@ -5,6 +5,8 @@ import com.company.U1M6Summative.dto.Customer;
 import com.company.U1M6Summative.dto.Invoice;
 import com.company.U1M6Summative.dto.InvoiceItem;
 import com.company.U1M6Summative.dto.Item;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 import static org.mockito.Mockito.mock;
@@ -26,6 +29,7 @@ import static org.mockito.Mockito.mock;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ServiceLayerTest {
+
         ServiceLayer service;
         CustomerDao customerDao;
         ItemDao itemDao;
@@ -139,5 +143,62 @@ public class ServiceLayerTest {
         doReturn(invoiceItem).when(invoiceItemDao).getInvoiceItem(1);
         doReturn(invoiceItemList).when(invoiceItemDao).getAllInvoiceItems();
    }
+
+    @Before
+    public void setUp() throws Exception {
+        setUpCustomerDaoMock();
+        setUpItemDaoMock();
+        setUpInvoiceDaoMinvoiceItem();
+        setUpInvoiceItemDaoMock();
+        service = new ServiceLayer(customerDao, itemDao, invoiceDao, invoiceItemDao);
+    }
+
+    @Test
+    //doReturn(customer).when(customerDao).saveCustomer(customer2);
+    //doReturn(customer).when(customerDao).findCustomer(1);
+    //doReturn(customerList).when(customerDao).findAllCustomer();
+
+    public void saveCustomer(Customer customer){
+        customer.setFirstName("Jay");
+        customer.setLastName("Jay");
+        customer.setEmail("@jay");
+        customer.setCompany("JayComp");
+        customer.setPhone("111-222-3333");
+        customer = service.saveCustomer(customer);
+    }
+
+    public void findCustomer(Customer customer) {
+        customer.setCustomerId(1);
+        customer.setFirstName("Jay");
+        customer.setLastName("Jay");
+        customer.setEmail("@jay");
+        customer.setCompany("JayComp");
+        customer.setPhone("111-222-3333")
+
+        Customer fromService = service.findCustomer(customer.getCustomerId());
+        assertEquals(customer, fromService);
+        List<Customer> customerList = service.findAllCustomer();
+        assertEquals(1, customerList.size());
+        assertEquals(customer, customerList.get(0));
+    }
+
+    @Test
+    public void saveFindFindAllCustomer() {
+        Customer customer = new Customer();
+        customer.setCustomerId(1);
+        customer.setFirstName("Jay");
+        customer.setLastName("Jay");
+        customer.setEmail("@jay");
+        customer.setCompany("JayComp");
+        customer.setPhone("111-222-3333")
+
+        Customer fromService = service.findCustomer(customer.getCustomerId());
+        assertEquals(customer, fromService);
+        List<Customer> customerList = service.findAllCustomers();
+        assertEquals(1, customerList.size());
+        assertEquals(customer, customerList.get(0));
+    }
+
+
 
 }

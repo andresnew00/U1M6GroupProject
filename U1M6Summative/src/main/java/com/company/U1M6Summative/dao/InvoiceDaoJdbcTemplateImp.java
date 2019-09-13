@@ -15,13 +15,13 @@ public class InvoiceDaoJdbcTemplateImp implements InvoiceDao {
 
     // Prepared statements
     private static final String INSERT_INVOICE_SQL =
-            "INSERT INTO invoice ( order_date, pickup_date, return_date, late_fee) VALUES (?,?,?,?)";
+            "INSERT INTO invoice (customer_id, order_date, pickup_date, return_date, late_fee) VALUES (?,?,?,?,?)";
     private static final String SELECT_INVOICE_SQL =
             "SELECT * FROM invoice WHERE invoice_id = ?";
     private static final String SELECT_ALL_INVOICES_SQL =
             "SELECT * FROM invoice";
     private static final String UPDATE_INVOICE_SQL =
-            "UPDATE invoice SET invoice_id = ?, customer_id = ?, order_id = ?, order_date = ?, pickup_date = ?, return_date = ?, late_fee = ? WHERE invoice_id = ?";
+            "UPDATE invoice SET customer_id = ?, order_date = ?, pickup_date = ?, return_date = ?, late_fee = ? WHERE invoice_id = ?";
     private static final String DELETE_INVOICE_SQL =
             "DELETE FROM invoice WHERE invoice_id = ?";
 
@@ -44,7 +44,11 @@ public class InvoiceDaoJdbcTemplateImp implements InvoiceDao {
     @Override
     public Invoice addInvoice(Invoice invoice) {
         jdbcTemplate.update(INSERT_INVOICE_SQL,
-                invoice.getOrderDate(), invoice.getPickupDate(), invoice.getReturnDate(), invoice.getLateFee());
+                invoice.getCustomerId(),
+                invoice.getOrderDate(),
+                invoice.getPickupDate(),
+                invoice.getReturnDate(),
+                invoice.getLateFee());
 
         Integer invoiceId = jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class);
 

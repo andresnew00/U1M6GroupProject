@@ -89,7 +89,7 @@ public class ServiceLayer {
         viewModel.setCustomer(customer);
         viewModel.setItem(items);
 
-        viewModel.setUnitRate( items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
+        viewModel.setUnitRate(items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
 
         viewModel.setDiscount(new BigDecimal(0.00));
 

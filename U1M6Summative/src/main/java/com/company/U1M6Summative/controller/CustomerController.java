@@ -55,10 +55,10 @@ public class CustomerController {
         service.updateCustomer(updated);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteCity(@PathVariable int id) {
-        if (service.findAllCustomers().contains(id)) {
+        if (service.findAllCustomers().contains(service.findCustomer(id))) {
             service.deleteCustomer(id);
         } else {
             throw new IllegalArgumentException("Customer ID not Found");
@@ -66,10 +66,10 @@ public class CustomerController {
         }
     }
 //get invoices by customer
-    @RequestMapping(value = "/{customerid}/{invoiceId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/GetInvoice/{customerId}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Invoice> getInvoiceByCustomer(@PathVariable int id,@PathVariable int invoiceId) {
+    public List<Invoice> getInvoiceByCustomer(@PathVariable int customerId) {
         return service.findAllInvoices().stream().filter
-                (invoice -> invoice.getCustomerId()==id).collect(Collectors.toList());
+                (invoice -> invoice.getCustomerId()==customerId).collect(Collectors.toList());
     }
 }

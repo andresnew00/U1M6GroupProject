@@ -60,7 +60,7 @@ public class CustomerDaoImpl implements CustomerDao{
     private String GET_ALL_CUSTTOMER_SQL=
             "SELECT * FROM customer";
     private String UPDATE_CUSTOMER_SQL=
-            "UPDATE customer SET first_name=?, last_name=?, email=?, company=?,phone=?) WHERE customer.customer_id=?";
+            "UPDATE customer SET first_name=?, last_name=?, email=?, company=?,phone=? WHERE customer.customer_id=?";
     private String DELETE_CUSTOMER_SQL=
             "DELETE FROM customer WHERE customer_id=?";
 

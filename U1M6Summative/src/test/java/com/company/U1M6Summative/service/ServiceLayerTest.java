@@ -173,7 +173,7 @@ public class ServiceLayerTest {
         customer.setLastName("Jay");
         customer.setEmail("@jay");
         customer.setCompany("JayComp");
-        customer.setPhone("111-222-3333")
+        customer.setPhone("111-222-3333");
 
         Customer fromService = service.findCustomer(customer.getCustomerId());
         assertEquals(customer, fromService);
@@ -190,7 +190,7 @@ public class ServiceLayerTest {
         customer.setLastName("Jay");
         customer.setEmail("@jay");
         customer.setCompany("JayComp");
-        customer.setPhone("111-222-3333")
+        customer.setPhone("111-222-3333");
 
         Customer fromService = service.findCustomer(customer.getCustomerId());
         assertEquals(customer, fromService);

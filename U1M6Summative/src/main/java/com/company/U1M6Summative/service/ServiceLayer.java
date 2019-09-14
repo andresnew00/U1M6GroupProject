@@ -184,9 +184,8 @@ public class ServiceLayer {
 
 //        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
 
-        List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter( invoice -> {
-            return invoice.getCustomerId() == customer.getCustomerId();
-        }).collect(Collectors.toList());
+        List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter(
+                invoice -> invoice.getCustomerId() == customer.getCustomerId()).collect(Collectors.toList());
 
         List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
 

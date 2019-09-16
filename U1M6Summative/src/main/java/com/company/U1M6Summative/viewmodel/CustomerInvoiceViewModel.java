@@ -1,8 +1,5 @@
 package com.company.U1M6Summative.viewmodel;
 
-import com.company.U1M6Summative.dto.Invoice;
-import com.company.U1M6Summative.dto.InvoiceItem;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,9 +10,10 @@ public class CustomerInvoiceViewModel {
     private String customerEmail;
     private String customerCompany;
     private String customerPhone;
-    private List<Invoice> invoices;
-    private List<List<InvoiceItem>> invoiceItems;
-    private BigDecimal unitRate;
+    private List<InvoiceViewModel> invoices;
+    //    private List<Invoice> invoices;
+//    private List<List<InvoiceItem>> invoiceItems;
+    private BigDecimal totalForAllInvoices;
     private BigDecimal discount;
 
     public int getId() {
@@ -42,28 +40,12 @@ public class CustomerInvoiceViewModel {
         this.customerLastName = customerLasttName;
     }
 
-    public List<Invoice> getInvoices() {
-        return invoices;
+    public BigDecimal getTotalForAllInvoices() {
+        return totalForAllInvoices;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
-    }
-
-    public List<List<InvoiceItem>> getInvoiceItems() {
-        return invoiceItems;
-    }
-
-    public void setInvoiceItems(List<List<InvoiceItem>> invoiceItems) {
-        this.invoiceItems = invoiceItems;
-    }
-
-    public BigDecimal getUnitRate() {
-        return unitRate;
-    }
-
-    public void setUnitRate(BigDecimal unitRate) {
-        this.unitRate = unitRate;
+    public void setTotalForAllInvoices(BigDecimal totalForAllInvoices) {
+        this.totalForAllInvoices = totalForAllInvoices;
     }
 
     public BigDecimal getDiscount() {
@@ -96,5 +78,13 @@ public class CustomerInvoiceViewModel {
 
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
+    }
+
+    public List<InvoiceViewModel> getInvoiceViewModels() {
+        return invoices;
+    }
+
+    public void setInvoiceViewModels(List<InvoiceViewModel> invoiceViewModels) {
+        this.invoices = invoiceViewModels;
     }
 }

@@ -301,8 +301,8 @@ public class ServiceLayerTest {
         List<List<InvoiceItem>> container = new ArrayList<>();
 //        container.set(0, new ArrayList<>());
         container.add(service.getAllInvoiceItems());
-        cvm.setInvoices(service.findAllInvoices());
-        cvm.setInvoiceItems(container);
+//        cvm.setInvoices(service.findAllInvoices());
+//        cvm.setInvoiceItems(container);
         cvm = service.saveCustomer(cvm);
     }
 

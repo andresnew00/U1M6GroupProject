@@ -60,6 +60,7 @@ public class ItemDaoTest {
         item.setDescription("Value Changed");
         itemDao.updateItem(item);
         Item testCase = itemDao.findOne(item.getItemId());
+        assertEquals(testCase, item);
     }
 
     @Test

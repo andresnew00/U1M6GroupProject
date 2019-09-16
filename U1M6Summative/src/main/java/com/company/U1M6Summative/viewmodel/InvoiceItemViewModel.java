@@ -1,108 +1,114 @@
 package com.company.U1M6Summative.viewmodel;
 
-import com.company.U1M6Summative.dto.Customer;
-import com.company.U1M6Summative.dto.Invoice;
-import com.company.U1M6Summative.dto.Item;
+import com.company.U1M6Summative.dto.InvoiceItem;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
 
-public class InvoiceItemViewModel {
+public class InvoiceItemViewModel extends InvoiceItem {
 
-    private int id;
-    private Invoice invoice;
-    private List<Item> item;
-    private int quantity;
-    private BigDecimal unitRate;
-    private BigDecimal discount;
-    private Customer customer;
+    private String name;
+    private String description;
+    private BigDecimal dailyRate;
 
     public InvoiceItemViewModel() {
+        super();
     }
 
-    public InvoiceItemViewModel(int id, Invoice invoice, List<Item> item, int quantity, BigDecimal unitRate, BigDecimal discount, Customer customer) {
-        this.id = id;
-        this.invoice = invoice;
-        this.item = item;
-        this.quantity = quantity;
-        this.unitRate = unitRate;
-        this.discount = discount;
-        this.customer = customer;
+    public InvoiceItemViewModel(int id, int invoiceId, int itemId, int quantity, BigDecimal unitRate, BigDecimal discount) {
+        super(id, invoiceId, itemId, quantity, unitRate, discount);
     }
 
+    @Override
     public int getId() {
-        return id;
+        return super.getId();
     }
 
+    @Override
     public void setId(int id) {
-        this.id = id;
+        super.setId(id);
     }
 
-    public Invoice getInvoice() {
-        return invoice;
+    @Override
+    public int getInvoiceId() {
+        return super.getInvoiceId();
     }
 
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
+    @Override
+    public void setInvoiceId(int invoiceId) {
+        super.setInvoiceId(invoiceId);
     }
 
-    public List<Item> getItem() {
-        return item;
+    @Override
+    public int getItemId() {
+        return super.getItemId();
     }
 
-    public void setItem(List<Item> item) {
-        this.item = item;
+    @Override
+    public void setItemId(int itemId) {
+        super.setItemId(itemId);
     }
 
+    @Override
     public int getQuantity() {
-        return quantity;
+        return super.getQuantity();
     }
 
+    @Override
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        super.setQuantity(quantity);
     }
 
+    @Override
     public BigDecimal getUnitRate() {
-        return unitRate;
+        return super.getUnitRate();
     }
 
+    @Override
     public void setUnitRate(BigDecimal unitRate) {
-        this.unitRate = unitRate;
+        super.setUnitRate(unitRate);
     }
 
+    @Override
     public BigDecimal getDiscount() {
-        return discount;
+        return super.getDiscount();
     }
 
+    @Override
     public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+        super.setDiscount(discount);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        InvoiceItemViewModel that = (InvoiceItemViewModel) o;
-        return id == that.id &&
-                quantity == that.quantity &&
-                Objects.equals(invoice, that.invoice) &&
-                Objects.equals(item, that.item) &&
-                Objects.equals(unitRate, that.unitRate) &&
-                Objects.equals(discount, that.discount) &&
-                Objects.equals(customer, that.customer);
+        return super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, invoice, item, quantity, unitRate, discount, customer);
+        return super.hashCode();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BigDecimal getDailyRate() {
+        return dailyRate;
+    }
+
+    public void setDailyRate(BigDecimal dailyRate) {
+        this.dailyRate = dailyRate;
     }
 }

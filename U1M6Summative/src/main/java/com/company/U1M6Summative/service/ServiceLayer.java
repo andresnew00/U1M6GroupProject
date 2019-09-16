@@ -10,10 +10,12 @@ import com.company.U1M6Summative.dto.InvoiceItem;
 import com.company.U1M6Summative.dto.Item;
 import com.company.U1M6Summative.viewmodel.CustomerInvoiceViewModel;
 import com.company.U1M6Summative.viewmodel.InvoiceItemViewModel;
+import com.company.U1M6Summative.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -121,21 +123,12 @@ public class ServiceLayer {
         invoiceDao.updateInvoice(invoice);
     }
 
-    public CustomerInvoiceViewModel getInvoice(int id) {
-        return buildCustomerInvoice(customerDao.findCustomer(id));
-    }
+    private InvoiceViewModel buildViewModel(Invoice invoice) {
 
-    private InvoiceItemViewModel buildViewModel(Invoice invoice) {
-
-        InvoiceItemViewModel viewModel = new InvoiceItemViewModel();
+        InvoiceViewModel viewModel = new InvoiceViewModel();
         List<Item> items = itemDao.findAllByInvoiceItem(invoice.getInvoiceId());
         Customer customer = customerDao.findCustomer(invoice.getCustomerId());
         List<InvoiceItem> invoiceItem = invoiceItemDao.getAllByInvoiceId(invoice.getInvoiceId());
-
-        viewModel.setCustomer(customer);
-        viewModel.setItem(items);
-        viewModel.setUnitRate(items.get(0).getDailyRate().multiply(new BigDecimal(viewModel.getQuantity())));
-        viewModel.setDiscount(new BigDecimal(0.00));
 
         return viewModel;
 
@@ -161,7 +154,7 @@ public class ServiceLayer {
         }
 
         customerInvoiceViewModel.setDiscount(new BigDecimal("0"));
-        customerInvoiceViewModel.setUnitRate(new BigDecimal("0"));
+        customerInvoiceViewModel.setTotalForAllInvoices(new BigDecimal("0"));
 
         return customerInvoiceViewModel;
 
@@ -176,28 +169,70 @@ public class ServiceLayer {
     private CustomerInvoiceViewModel buildCustomerInvoice(Customer customer) {
 
         CustomerInvoiceViewModel cvm = new CustomerInvoiceViewModel();
+        cvm.setId(customer.getCustomerId());
         cvm.setCustomerFirstName(customer.getFirstName());
         cvm.setCustomerLastName(customer.getLastName());
         cvm.setCustomerCompany(customer.getCompany());
         cvm.setCustomerPhone(customer.getPhone());
         cvm.setCustomerEmail(customer.getEmail());
+        cvm.setDiscount(BigDecimal.valueOf(0.10));
 
-//        cvm.setCustomerName(customer.getFirstName() + " " +customer.getLastName());
+        List<InvoiceViewModel> views = invoiceDao.getAllInvoices().stream().filter(
+                invoice -> invoice.getCustomerId() == customer.getCustomerId()).map(
+                this::buildInvoiceView).collect(Collectors.toList());
 
-        List<Invoice> customersInvoices = invoiceDao.getAllInvoices().stream().filter( invoice -> {
-            return invoice.getCustomerId() == customer.getCustomerId();
-        }).collect(Collectors.toList());
+        cvm.setInvoiceViewModels(views);
 
-        List<List<InvoiceItem>> invoiceItems = new ArrayList<>();
+        final BigDecimal[] totalAmount = {new BigDecimal(0)};
 
-        for (int i = 0; i < customersInvoices.size(); i++) {
-            invoiceItems.add(invoiceItemDao.getAllByInvoiceId(customersInvoices.get(i).getInvoiceId()));
-        }
+        views.forEach((model) -> model.getInvoiceItems().forEach((items) -> {
+            totalAmount[0] = totalAmount[0].add(items.getUnitRate());
+        }));
 
-        cvm.setInvoices(customersInvoices);
-        cvm.setInvoiceItems(invoiceItems);
+        cvm.setTotalForAllInvoices(totalAmount[0].subtract(totalAmount[0].multiply(cvm.getDiscount()).setScale(2, RoundingMode.HALF_EVEN)));
 
         return cvm;
+
+    }
+
+    private InvoiceViewModel buildInvoiceView(Invoice invoice) {
+
+        InvoiceViewModel invm = new InvoiceViewModel();
+
+        invm.setCustomerId(invoice.getCustomerId());
+        invm.setInvoiceId(invoice.getInvoiceId());
+        invm.setOrderDate(invoice.getOrderDate());
+        invm.setPickupDate(invoice.getPickupDate());
+        invm.setReturnDate(invoice.getReturnDate());
+        invm.setLateFee(invoice.getLateFee());
+
+        List<InvoiceItemViewModel> views = invoiceItemDao.getAllByInvoiceId(invm.getInvoiceId()).stream().
+                map(this::buildInvoiceItemView).collect(Collectors.toList());
+
+        invm.setInvoiceItems(views);
+
+        return invm;
+
+    }
+
+    private InvoiceItemViewModel buildInvoiceItemView(InvoiceItem item) {
+
+        InvoiceItemViewModel itemViewModel = new InvoiceItemViewModel();
+
+        itemViewModel.setDiscount(item.getDiscount());
+        itemViewModel.setId(item.getId());
+        itemViewModel.setInvoiceId(item.getInvoiceId());
+        itemViewModel.setItemId(item.getItemId());
+        itemViewModel.setQuantity(item.getQuantity());
+
+        Item foundItem = itemDao.findOne(item.getItemId());
+        itemViewModel.setName(foundItem.getName());
+        itemViewModel.setDescription(foundItem.getDescription());
+        itemViewModel.setDailyRate(foundItem.getDailyRate());
+
+        itemViewModel.setUnitRate(itemViewModel.getDailyRate().multiply(new BigDecimal(itemViewModel.getQuantity())));
+
+        return itemViewModel;
 
     }
 
